@@ -11,6 +11,7 @@ import numpy as np
 import json
 
 from ivy.utils.exceptions import IvyBackendException, IvyException
+import fickling
 
 
 try:
@@ -1221,7 +1222,7 @@ class ContainerBase(dict, abc.ABC):
             Container loaded from disk
         """
         return ivy.Container(
-            pickle.load(open(pickle_filepath, "rb")),
+            fickling.load(open(pickle_filepath, "rb")),
             rebuild_child_containers=True,
             ivyh=ivyh,
         ).to_ivy()
