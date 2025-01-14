@@ -1,11 +1,11 @@
 # global
 import ivy
 from hypothesis import assume, strategies as st
-import random
 
 # local
 import ivy_tests.test_ivy.helpers as helpers
 from ivy_tests.test_ivy.helpers import handle_frontend_test
+import secrets
 
 
 # --- Helpers --- #
@@ -146,7 +146,7 @@ def mha_forward_args(draw, dtypes):
         )
     )
 
-    if random.randint(0, 1) == 0:
+    if secrets.SystemRandom().randint(0, 1) == 0:
         use_separate_proj_weight = True
         q_proj_weight = draw(
             helpers.array_values(
@@ -194,8 +194,7 @@ def mha_forward_args(draw, dtypes):
             shape=(embed_dim,),
         )
     )
-    bias_k = random.choice(
-        [
+    bias_k = secrets.choice([
             draw(
                 helpers.array_values(
                     dtype=dtype[0],
@@ -210,8 +209,7 @@ def mha_forward_args(draw, dtypes):
     bias_v = bias_k
 
     if bias_k is None:
-        static_k = random.choice(
-            [
+        static_k = secrets.choice([
                 draw(
                     helpers.array_values(
                         dtype=dtype[0],
@@ -229,8 +227,7 @@ def mha_forward_args(draw, dtypes):
         static_v = None
 
     attn_mask = ivy.ones((seq_len, seq_len), dtype=dtype[0])
-    key_padding_mask = random.choice(
-        [
+    key_padding_mask = secrets.choice([
             ivy.random_normal(shape=(seq_len, seq_len), dtype=dtype[0]) > 0,
             None,
         ]
