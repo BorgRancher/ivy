@@ -11,6 +11,7 @@ import numpy as np
 import json
 
 from ivy.utils.exceptions import IvyBackendException, IvyException
+import secrets
 
 
 try:
@@ -19,7 +20,6 @@ try:
 except ModuleNotFoundError:
     h5py = None
 import pickle
-import random
 from operator import mul
 from functools import reduce as _reduce
 from typing import Union, Tuple
@@ -1310,7 +1310,7 @@ class ContainerBase(dict, abc.ABC):
             ),
         )
         if seed_value is None:
-            seed_value = random.randint(0, 1000)
+            seed_value = secrets.SystemRandom().randint(0, 1000)
         if type(h5_obj_or_filepath) is str:
             h5_obj = h5py.File(h5_obj_or_filepath, "a")
         else:
@@ -1320,9 +1320,9 @@ class ContainerBase(dict, abc.ABC):
             if isinstance(value, h5py.Group):
                 ivy.Container.shuffle_h5_file(value, seed_value)
             elif isinstance(value, h5py.Dataset):
-                random.seed(seed_value)
+                secrets.SystemRandom().seed(seed_value)
                 # noinspection PyTypeChecker
-                random.shuffle(value)
+                secrets.SystemRandom().shuffle(value)
             else:
                 raise ivy.utils.exceptions.IvyException(
                     "Item found inside h5_obj which was neither a Group nor a Dataset."

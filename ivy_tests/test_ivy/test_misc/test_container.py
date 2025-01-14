@@ -2,7 +2,6 @@
 import os
 import queue
 import pytest
-import random
 import numpy as np
 import multiprocessing
 import pickle
@@ -12,6 +11,7 @@ import ivy
 from ivy.functional.ivy.gradients import _variable
 from ivy.data_classes.container import Container
 from ivy.utils.exceptions import IvyException
+import secrets
 
 
 def test_container_all_false(on_device):
@@ -3067,8 +3067,8 @@ def test_container_to_disk_shuffle_and_from_disk_as_hdf5(on_device):
 
     # testing
     data = np.array([1, 2, 3])
-    random.seed(0)
-    random.shuffle(data)
+    secrets.SystemRandom().seed(0)
+    secrets.SystemRandom().shuffle(data)
 
     assert (ivy.to_numpy(container_shuffled["a"]) == data).all()
     assert (ivy.to_numpy(container_shuffled.a) == data).all()
