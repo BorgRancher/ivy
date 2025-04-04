@@ -74,7 +74,7 @@ if __name__ == "__main__":
                     "backend": backend[:-1],
                     "test": test,
                 }
-                response = requests.get(url, params=params)
+                response = requests.get(url, params=params, timeout=60)
                 if response.status_code == 200:
                     if response.json():
                         # The test passes on main but fails in this fork/branch
