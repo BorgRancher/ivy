@@ -3,7 +3,6 @@ import numpy as np
 import ivy.functional.frontends.jax.lax as jlax
 import ivy.functional.frontends.jax.numpy as jnp
 from hypothesis import assume, strategies as st
-import random
 from jax.lax import ConvDimensionNumbers
 
 # local
@@ -22,6 +21,7 @@ from ivy.functional.frontends.jax.lax.operators import (
     _dimension_numbers,
     _argsort_tuple,
 )
+import secrets
 
 
 # --- Helpers --- #
@@ -142,7 +142,7 @@ def _general_dot_helper(draw):
         )
     )
     ndims = len(lshape)
-    perm_id = random.sample(list(range(ndims)), ndims)
+    perm_id = secrets.SystemRandom().sample(list(range(ndims)), ndims)
     rshape = [lshape[i] for i in perm_id]
     input_dtype, rhs = draw(
         helpers.dtype_and_values(
@@ -154,7 +154,7 @@ def _general_dot_helper(draw):
     )
     ind_list = list(range(ndims))
     batch_n = draw(st.integers(min_value=1, max_value=len(lshape) - 1))
-    lhs_batch = random.sample(ind_list, batch_n)
+    lhs_batch = secrets.SystemRandom().sample(ind_list, batch_n)
     rhs_batch = [perm_id.index(i) for i in lhs_batch]
     lhs_contracting = [i for i in ind_list if i not in lhs_batch]
     rhs_contracting = [perm_id.index(i) for i in lhs_contracting]
