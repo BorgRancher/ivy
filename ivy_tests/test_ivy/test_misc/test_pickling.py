@@ -7,6 +7,7 @@ from hypothesis import given, assume
 # local
 import ivy
 import ivy_tests.test_ivy.helpers as helpers
+import fickling
 
 
 # pickling array test to disk
@@ -35,7 +36,7 @@ def test_pickle_to_and_from_disk(dtype_and_x, on_device, backend_fw):
 
     assert os.path.exists(save_filepath)
 
-    unpickled_arr = pickle.load(open(save_filepath, "rb"))
+    unpickled_arr = fickling.load(open(save_filepath, "rb"))
 
     os.remove(save_filepath)
 
